@@ -59,4 +59,21 @@ export class Tree{
     }
     return mergedArray;
   };
+
+  insert(root, value){
+    if (root === null){
+      root = new Node(value);
+      return root;
+    };
+    if (root.data === value){
+      return root;
+    };
+    if (root.data > value){
+      root.left = this.insert(root.left,value);
+    }
+    else if (root.data < value){
+      root.right = this.insert(root.right, value);
+    }
+    return root;
+  }
 }
