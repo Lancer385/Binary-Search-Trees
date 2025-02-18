@@ -59,8 +59,10 @@ export class Tree{
     }
     return mergedArray;
   };
-
-  insert(root, value){
+  insert(value){
+    return this.#insert(this.root, value);
+  }
+  #insert(root, value){
     if (root === null){
       root = new Node(value);
       return root;
@@ -69,11 +71,40 @@ export class Tree{
       return root;
     };
     if (root.data > value){
-      root.left = this.insert(root.left,value);
+      root.left = this.#insert(root.left,value);
     }
     else if (root.data < value){
-      root.right = this.insert(root.right, value);
+      root.right = this.#insert(root.right, value);
     }
     return root;
   }
+  delete(value){
+    return this.#delete(this.root, value);
+  }
+  #delete(root, value){
+    if (root.data === null){
+      return root;
+    }
+    if (root.data > value){
+      root.left = this.#delete(root.left,value);
+    }
+    else if (root.data < value){
+      root.right = this.#delete(root.right, value);
+    }
+    else {
+      if (root.left === null){
+        return root.right
+      }
+      if (root.right === null){
+        return root.left;
+      }
+      let temp = root.right;
+      while (temp !== null && temp.left !== null){
+        temp = temp.left
+      }
+      root.data = temp.data;
+      root.right = this.#delete(root.right, temp.data);
+    }
+    return root;
+  };
 }
