@@ -100,11 +100,26 @@ export class Tree{
       }
       let temp = root.right;
       while (temp !== null && temp.left !== null){
-        temp = temp.left
+        temp = temp.left 
       }
-      root.data = temp.data;
+      root.data = temp.data; 
       root.right = this.#delete(root.right, temp.data);
     }
     return root;
   };
+  find(root, value){
+    if (root === null){
+      return null;
+    }
+    if (root.data === value){
+      return root;
+    }
+    else {
+      let found = this.find(root.left, value);
+      if (found === null){
+        found = this.find(root.right, value);
+      }
+      return found;
+    }
+  }
 }
