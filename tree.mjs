@@ -107,7 +107,10 @@ export class Tree{
     }
     return root;
   };
-  find(root, value){
+  find(value){
+    return this.#find(this.root, value);
+  }
+  #find(root, value){
     if (root === null){
       return null;
     }
@@ -115,9 +118,9 @@ export class Tree{
       return root;
     }
     else {
-      let found = this.find(root.left, value);
+      let found = this.#find(root.left, value);
       if (found === null){
-        found = this.find(root.right, value);
+        found = this.#find(root.right, value);
       }
       return found;
     }
