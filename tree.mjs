@@ -125,4 +125,67 @@ export class Tree{
       return found;
     }
   }
+
+  collectNodes(node){
+    console.log(node.data);
+  }
+  levelOrder(collectNodes){
+    let queue = [];
+    if (this.root === null) {
+      return;
+    }
+    if (collectNodes === undefined){
+      throw new Error ("Callback is needed")
+    }
+    queue.push(this.root);
+    while (queue.length > 0){
+      let current = queue[0]
+      collectNodes(current);
+      if (current.left !== null){queue.push(current.left)};
+      if (current.right !== null){queue.push(current.right)};
+      queue.shift();
+    }
+  }
+  inOrder(collectNodes){
+    this.#inOrder(this.root, collectNodes);
+  }
+  #inOrder(root, collectNodes){
+    if (root === null){
+      return;
+    }
+    if (collectNodes === undefined){
+      throw new Error ("Callback is needed")
+    }
+    this.#inOrder(root.left, this.collectNodes)
+    collectNodes(root);
+    this.#inOrder(root.right, this.collectNodes)
+  }
+  preOrder(collectNodes){
+    this.#preOrder(this.root, collectNodes);
+  }
+  #preOrder(root, collectNodes){
+    if (root === null){
+      return;
+    }
+    if (collectNodes === undefined){
+      throw new Error ("Callback is needed")
+    }
+    collectNodes(root);
+    this.#preOrder(root.left, this.collectNodes)
+    this.#preOrder(root.right, this.collectNodes)
+  }
+  postOrder(collectNodes){
+    this.#postOrder(this.root, collectNodes)
+  }
+  #postOrder(root, collectNodes){
+    if (root === null){
+      return;
+    }
+    if (collectNodes === undefined){
+      throw new Error ("Callback is needed")
+    }
+    this.#inOrder(root.left, this.collectNodes)
+    this.#inOrder(root.right, this.collectNodes)
+    collectNodes(root);
+  }
 }
