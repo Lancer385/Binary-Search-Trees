@@ -162,8 +162,8 @@ export class Tree{
       throw new Error ("Callback is needed")
     }
     collectNodes(root);
-    this.inOrder(this.collectNodes, root.left)
-    this.inOrder(this.collectNodes, root.right)
+    this.postOrder(this.collectNodes, root.left)
+    this.postOrder(this.collectNodes, root.right)
   }
 
   postOrder(collectNodes, root = this.root){
@@ -173,8 +173,9 @@ export class Tree{
     if (collectNodes === undefined){
       throw new Error ("Callback is needed")
     }
-    this.inOrder(this.collectNodes, root.left)
-    this.inOrder(this.collectNodes, root.right)
+    this.postOrder(this.collectNodes, root.left)
+    this.postOrder(this.collectNodes, root.right)
     collectNodes(root);
   }
-}
+
+};
