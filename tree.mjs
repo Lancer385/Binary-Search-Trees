@@ -177,5 +177,36 @@ export class Tree{
     this.postOrder(this.collectNodes, root.right)
     collectNodes(root);
   }
+  depth(node, root = this.root, depth = 0){
+    if (root === null){
+      return -1;
+    };
+    if (root.data === node){
+      return depth;
+    }
+    else {
+    let left = this.depth(node, root.left, depth + 1);
+    let right = this.depth(node, root.right, depth + 1);
+    if (left === -1){
+      return right;
+    }
+    else{
+      return left;
+    };
+  };
+  };
 
+  #postOrderHeight(root){
+    if (root === null){
+      return -1;
+    }
+    let left = this.#postOrderHeight(root.left);
+    let right = this.#postOrderHeight(root.right);
+    return Math.max(left, right) + 1;
+  };
+  height(node){
+    let found = this.find(node);
+    let height = this.#postOrderHeight(found);
+    return height;
+  };
 };
