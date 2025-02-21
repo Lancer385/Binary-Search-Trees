@@ -59,10 +59,8 @@ export class Tree{
     }
     return mergedArray;
   };
-  insert(value){
-    return this.#insert(this.root, value);
-  }
-  #insert(root, value){
+
+  insert(value, root = this.root){
     if (root === null){
       root = new Node(value);
       return root;
@@ -71,25 +69,23 @@ export class Tree{
       return root;
     };
     if (root.data > value){
-      root.left = this.#insert(root.left,value);
+      root.left = this.insert(value, root.left);
     }
     else if (root.data < value){
-      root.right = this.#insert(root.right, value);
+      root.right = this.insert(value, root.right);
     }
     return root;
   }
-  delete(value){
-    return this.#delete(this.root, value);
-  }
-  #delete(root, value){
+
+  delete(value, root = this.root){
     if (root.data === null){
       return root;
     }
     if (root.data > value){
-      root.left = this.#delete(root.left,value);
+      root.left = this.delete(value, root.left);
     }
     else if (root.data < value){
-      root.right = this.#delete(root.right, value);
+      root.right = this.delete(value, root.right);
     }
     else {
       if (root.left === null){
@@ -103,14 +99,12 @@ export class Tree{
         temp = temp.left 
       }
       root.data = temp.data; 
-      root.right = this.#delete(root.right, temp.data);
+      root.right = this.delete(temp.data, root.right);
     }
     return root;
   };
-  find(value){
-    return this.#find(this.root, value);
-  }
-  #find(root, value){
+
+  find(value, root = this.root){
     if (root === null){
       return null;
     }
@@ -118,9 +112,9 @@ export class Tree{
       return root;
     }
     else {
-      let found = this.#find(root.left, value);
+      let found = this.find(value, root.left);
       if (found === null){
-        found = this.#find(root.right, value);
+        found = this.find(value, root.right);
       }
       return found;
     }
@@ -129,6 +123,7 @@ export class Tree{
   collectNodes(node){
     console.log(node.data);
   }
+
   levelOrder(collectNodes){
     let queue = [];
     if (this.root === null) {
@@ -146,24 +141,20 @@ export class Tree{
       queue.shift();
     }
   }
-  inOrder(collectNodes){
-    this.#inOrder(this.root, collectNodes);
-  }
-  #inOrder(root, collectNodes){
+
+  inOrder(collectNodes, root = this.root){
     if (root === null){
       return;
     }
     if (collectNodes === undefined){
       throw new Error ("Callback is needed")
     }
-    this.#inOrder(root.left, this.collectNodes)
+    this.inOrder(this.collectNodes, root.left)
     collectNodes(root);
-    this.#inOrder(root.right, this.collectNodes)
+    this.inOrder(this.collectNodes, root.right)
   }
-  preOrder(collectNodes){
-    this.#preOrder(this.root, collectNodes);
-  }
-  #preOrder(root, collectNodes){
+
+  preOrder(collectNodes, root = this.root){
     if (root === null){
       return;
     }
@@ -171,21 +162,19 @@ export class Tree{
       throw new Error ("Callback is needed")
     }
     collectNodes(root);
-    this.#preOrder(root.left, this.collectNodes)
-    this.#preOrder(root.right, this.collectNodes)
+    this.inOrder(this.collectNodes, root.left)
+    this.inOrder(this.collectNodes, root.right)
   }
-  postOrder(collectNodes){
-    this.#postOrder(this.root, collectNodes)
-  }
-  #postOrder(root, collectNodes){
+
+  postOrder(collectNodes, root = this.root){
     if (root === null){
       return;
     }
     if (collectNodes === undefined){
       throw new Error ("Callback is needed")
     }
-    this.#inOrder(root.left, this.collectNodes)
-    this.#inOrder(root.right, this.collectNodes)
+    this.inOrder(this.collectNodes, root.left)
+    this.inOrder(this.collectNodes, root.right)
     collectNodes(root);
   }
 }
