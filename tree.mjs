@@ -13,9 +13,14 @@ export class Tree{
     this.root = root;
     return root;
   };
-  build(array){
-    const newArray = [...new Set(this.mergeSort(array))]
-    return this.buildTree(newArray, 0, newArray.length - 1)
+  build(arr){
+    if (!this.checkSorted(arr)){
+      const newArray = [...new Set(this.mergeSort(arr))]
+      return this.buildTree(newArray, 0, newArray.length - 1);
+    }
+    else {
+      return this.buildTree(arr, 0, arr.length - 1)
+    }
   };
   prettyPrint(node, prefix = "", isLeft = true){
     if (node === null) {
@@ -120,10 +125,6 @@ export class Tree{
     }
   }
 
-  collectNodes(node){
-    console.log(node.data);
-  }
-
   levelOrder(collectNodes){
     let queue = [];
     if (this.root === null) {
@@ -149,9 +150,9 @@ export class Tree{
     if (collectNodes === undefined){
       throw new Error ("Callback is needed")
     }
-    this.inOrder(this.collectNodes, root.left)
+    this.inOrder(collectNodes, root.left)
     collectNodes(root);
-    this.inOrder(this.collectNodes, root.right)
+    this.inOrder(collectNodes, root.right)
   }
 
   preOrder(collectNodes, root = this.root){
@@ -162,8 +163,8 @@ export class Tree{
       throw new Error ("Callback is needed")
     }
     collectNodes(root);
-    this.postOrder(this.collectNodes, root.left)
-    this.postOrder(this.collectNodes, root.right)
+    this.postOrder(collectNodes, root.left)
+    this.postOrder(collectNodes, root.right)
   }
 
   postOrder(collectNodes, root = this.root){
@@ -173,8 +174,8 @@ export class Tree{
     if (collectNodes === undefined){
       throw new Error ("Callback is needed")
     }
-    this.postOrder(this.collectNodes, root.left)
-    this.postOrder(this.collectNodes, root.right)
+    this.postOrder(collectNodes, root.left)
+    this.postOrder(collectNodes, root.right)
     collectNodes(root);
   }
   depth(node, root = this.root, depth = 0){
@@ -209,4 +210,28 @@ export class Tree{
     let height = this.#postOrderHeight(found);
     return height;
   };
+
+  isBalanced(){
+    let left = this.#postOrderHeight(this.root.left);
+    let right = this.#postOrderHeight(this.root.right);
+    if (Math.abs(left - right) <= 1){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  checkSorted(arr) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] > arr[i + 1]) {
+            return false;
+        }
+    }
+    return true;
+  }
+  rebalance(){
+    let array = []
+    this.inOrder((node) => array.push(node.data));
+    this.build(array);
+  }
 };
